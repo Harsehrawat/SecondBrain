@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer utilities{
+    .purple-600{
+        color:  #514de1;
+    }
+    .purple-200{
+        color:#e0e7ff ;
+    }
+    .purple-500{
+        color: #352f9b;
+    }
+
+    .gray-200{
+        color: #f9fbfc;
+    }
+    .gray-400{
+        color: #dddddd;
+    }
+}
