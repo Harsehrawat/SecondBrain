@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { Button } from "../Components/ui/Button";
-import { Input } from "../Components/ui/Input";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { data, useNavigate } from "react-router-dom";
@@ -28,7 +28,8 @@ export function Signup(){
     }
         
 
-    return <div className="h-100 w-full flex justify-center items-center">
+    return <div className="h-screen">
+        <div className="w-full flex  h-full bg-white justify-center items-center">
         <div className="bg-white rounded-md text-black border p-2">
             Create Account for free
             <Input ref={usernameRef} placeholder="username"/>
@@ -38,5 +39,6 @@ export function Signup(){
             </div>
         </div>
 
+    </div>
     </div>
 }

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-import { Button } from '../Components/ui/Button'
+import { Button } from '../components/ui/Button'
 import { PlusIcon } from '../icons/Plus'
 import { ShareIcon } from '../icons/Share'
 
 
 import '../App.css'
 import '../index.css' 
-import { Card } from '../Components/ui/Card'
-import { CreateContentModal } from '../Components/ui/CreateContentModal'
+import { Card } from '../components/ui/Card'
+import { CreateContentModal } from '../components/ui/CreateContentModal'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import { useFetchContent } from '../CustomHook/useFetchContent'
