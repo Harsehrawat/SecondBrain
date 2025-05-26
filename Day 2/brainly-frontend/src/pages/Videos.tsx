@@ -1,8 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { MdOutlineContentCopy, MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
-import { FaYoutube, FaTwitter, FaCheck } from "react-icons/fa";
-import { HiOutlineDocument } from "react-icons/hi";
+import { FaYoutube,  FaCheck } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,7 @@ interface dataInterface {
   tags: string[],
   createdAt: string,
 }
-const Dashboard = () => {
+const Youtube = () => {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const [data, setData] = useState<dataInterface[]>([])
@@ -46,7 +45,7 @@ const Dashboard = () => {
       .catch((res) => console.log(res))
     window.location.reload();
   }
-  const editValuesHandler = (id: string) => {
+    const editValuesHandler = (id: string) => {
     if (!token) {
       return;
     }
@@ -83,7 +82,7 @@ const Dashboard = () => {
       setTagValue("")
     }
     axios.put(`${API_BASE}/content/${id}`, { ...inputValue }, { headers: { token: JSON.parse(token) } })
-      .then((res) => console.log(res))
+      .then((res)=>console.log(res))
       .catch((res) => console.log(res))
     setInputValue({ title: "", link: "", tags: [] })
     setTags([])
@@ -109,7 +108,6 @@ const Dashboard = () => {
       {
         data.map((e: dataInterface) => {
           const youtube = e.link.includes("youtube.com")
-          const twitter = e.link.includes("twitter.com") || e.link.includes("x.com")
           function convertToEmbedUrl(youtubeUrl: string) {
             const urlPattern = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
             const match = youtubeUrl.match(urlPattern);
@@ -120,26 +118,21 @@ const Dashboard = () => {
           }
           const nlink = convertToEmbedUrl(e.link)
           return (
-            <Card className=" md:w-96 w-full h-[480px] overflow-auto m-3" key={e._id}>
+            youtube&&<Card className=" md:w-96 w-full h-[480px] overflow-auto m-3" key={e._id}>
               <CardHeader>
                 <CardTitle className="flex justify-around items-center">
                   <div className="flex">
                     {
                       youtube && <FaYoutube className="text-2xl mr-4 cursor-pointer" />
                     }
-                    {
-                      twitter && <FaTwitter className="text-2xl mr-4 cursor-pointer" />
-                    }
-                    {
-                      !youtube && !twitter && <HiOutlineDocument className="text-2xl mr-4 cursor-pointer" />
-                    }
                   </div>
                   <p className=" text-center p-1">{e.title}</p>
                   <div className="flex">
                     {copied && copyId == e._id ? <FaCheck className="text-2xl duration-500 ease-in-out" /> : <MdOutlineContentCopy className="text-2xl duration-500 ease-in-out cursor-pointer" onClick={() => copyHandler(e.link, e._id)} />}
+
                     <Dialog>
                       <DialogTrigger onClick={()=>editValuesHandler(e._id)}>
-                        <MdOutlineEdit className="text-2xl ml-2 cursor-pointer" />
+                        <MdOutlineEdit className="text-2xl ml-2 cursor-pointer"/>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
@@ -148,14 +141,14 @@ const Dashboard = () => {
                             <Input placeholder="Title" type="text" className="my-4" value={inputValue.title} onChange={(e) => setInputValue({ ...inputValue, title: e.target.value })} />
                             <Input placeholder="Link" type="text" value={inputValue.link} onChange={(e) => setInputValue({ ...inputValue, link: e.target.value })} />
                             <div className="h-[300px] border my-4 overflow-x-hidden sm:w-[470px] overflow-y-scroll">
-                              {tags.map((e, i) => {
+                              {tags.map((e,i) => {
                                 return (
-                                  <Badge className="m-2" key={e + i}>{e} <span className="text-accent text-lg" onClick={() => handleFilterTags(e)}>x</span> </Badge>
+                                  <Badge className="m-2" key={e+i}>{e} <span className="text-accent text-lg" onClick={() => handleFilterTags(e)}>x</span> </Badge>
                                 )
                               })}
                             </div>
                             <Input placeholder="tags" type="text" value={tagValue} onKeyDown={handleTags} onChange={(e) => { setTagValue(e.target.value) }} />
-                            <Button className="mt-2 cursor-pointer rounded-sm" onClick={() => submithandler(e._id)} disabled={!inputValue.title || !inputValue.link}>Update Link</Button>
+                            <Button className="mt-2 cursor-pointer rounded-sm" onClick={()=>submithandler(e._id)} disabled={!inputValue.title || !inputValue.link}>Update Link</Button>
                           </DialogDescription>
                         </DialogHeader>
                       </DialogContent>
@@ -163,24 +156,13 @@ const Dashboard = () => {
                     <MdOutlineDelete className="text-2xl ml-2 cursor-pointer" onClick={() => deleteContent(e._id)} />
                   </div>
                 </CardTitle>
-                {
-                  twitter && <div className=" rounded-lg px-2">
-                    <blockquote className="twitter-tweet">
-                      <a href={e.link.replace("x.com", "twitter.com")}></a>
-                    </blockquote>
-                  </div>
-                }
+                
                 {
                   youtube && <div className=" rounded-lg">
                     <iframe className=" w-full h-60 px-5 pb-2 rounded-lg mt-5" width="560" height="315" src={(nlink)} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
                   </div>
                 }
-                {
-                  !youtube && !twitter && <a href={`${e.link}`} className=" mx-4 inline-block my-2 underline text-primary" target="_blank">Your Link</a>
-                }
-                {
-                  !youtube && !twitter && <iframe src={`${e.link}`} className="w-full h-[250px]"></iframe>
-                }
+                
               </CardHeader>
               <CardContent>
                 {
@@ -194,16 +176,12 @@ const Dashboard = () => {
               <CardFooter>
                 <p>Added on {formatDate(e.createdAt)}</p>
               </CardFooter>
-
             </Card>
           )
         })
-      }
-      {
-        !data.length && <h1 className="flex justify-center items-center w-screen h-[80vh] text-6xl">No Content</h1>
       }
     </div>
   )
 }
 
-export default Dashboard
+export default Youtube

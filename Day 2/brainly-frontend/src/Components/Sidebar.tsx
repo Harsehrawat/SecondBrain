@@ -3,7 +3,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "../components/ui/sheet"
 import { LuLayoutGrid,LuBrain } from "react-icons/lu";
 import { FaYoutube,FaTwitter,FaUser } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
